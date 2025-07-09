@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1079547207648",
+    "project_id": "portfolio-489-1",
+    "storage_bucket": "portfolio-489-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079547207648:android:09c3cf68188647baaed585",
+        "android_client_info": {
+          "package_name": "KoustavK.com.my_portfolio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF2LjTyWzCaupE5bloz39_ypSnTxng88w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079547207648:android:454cc6fd0f2ad32daed585",
+        "android_client_info": {
+          "package_name": "KoustavK.com.my_portfolio1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF2LjTyWzCaupE5bloz39_ypSnTxng88w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
