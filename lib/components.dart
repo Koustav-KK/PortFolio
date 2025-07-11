@@ -264,7 +264,9 @@ class _DrawerMobileState extends State<DrawerMobile> {
 class SansBold extends StatelessWidget {
   final text;
   final size;
-  const SansBold(this.text, this.size, {Key? key}) : super(key: key);
+  final color;
+  const SansBold(this.text, this.size, {Key? key, this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

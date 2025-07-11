@@ -95,7 +95,7 @@ class _WorkMobileState extends State<WorkMobile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Sans(
-                      "Deployed on Android, iOS, and Web, the Budget App lets users track income and expenses easily with a clean Flutter UI and secure Firebase backend",
+                      "Deployed on Android, iOS, the Weather App provides real-time updates with a sleek Flutter UI.",
                       15.0),
                 ),
                 SizedBox(
