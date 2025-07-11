@@ -72,7 +72,7 @@ class _WorkMobileState extends State<WorkMobile> {
                 SizedBox(
                   height: 30.0,
                 ),
-                SansBold("PortFolio", 20.0),
+                SansBold("Budget App", 20.0),
                 SizedBox(height: 10.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -81,6 +81,26 @@ class _WorkMobileState extends State<WorkMobile> {
                       15.0),
                 ),
                 SizedBox(height: 20.0),
+                AnimatedCard(
+                  imagePath: "assets/weather.png",
+                  fit: BoxFit.contain,
+                  height: 150.0,
+                  width: 200.0,
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                SansBold("Weather App", 20.0),
+                SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Sans(
+                      "Deployed on Android, iOS, and Web, the Budget App lets users track income and expenses easily with a clean Flutter UI and secure Firebase backend",
+                      15.0),
+                ),
+                SizedBox(
+                  height: 30.0,
+                )
               ],
             ),
           ],

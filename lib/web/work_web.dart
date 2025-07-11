@@ -94,6 +94,36 @@ class _WorkWebState extends State<WorkWeb> {
                             )),
                       ],
                     ),
+                    SizedBox(
+                      height: 80.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AnimatedCard(
+                          imagePath: "assets/weather.png",
+                          height: 200.0,
+                          width: 100.0,
+                          fit: BoxFit.fill,
+                        ),
+                        SizedBox(
+                            width: widthDevice / 3,
+                            child: Column(
+                              children: [
+                                SansBold("Budget App", 30.0),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                SansBold(
+                                    "Deployed on Android, iOS, and Web, the Budget App lets users track income and expenses easily with a clean Flutter UI and secure Firebase backend",
+                                    15.0),
+                              ],
+                            )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 80.0,
+                    ),
                   ],
                 ),
               ],
