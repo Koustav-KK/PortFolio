@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'package:my_portfolio/theme_controller.dart';
 
 class TabsWeb extends StatefulWidget {
   final route;
@@ -50,11 +50,11 @@ class _TabsWebState extends State<TabsWeb> with SingleTickerProviderStateMixin {
             style: GoogleFonts.aBeeZee(
               fontSize: 20.0,
               color: isSelected
-                  ? Colors.tealAccent
+                  ? Colors.blue.shade700
                   : Theme.of(context).textTheme.bodyLarge!.color,
               decoration:
-                  isSelected ? TextDecoration.underline : TextDecoration.none,
-              decorationColor: Colors.tealAccent,
+                  isSelected ? TextDecoration.none : TextDecoration.none,
+              decorationColor: Colors.blue,
               decorationThickness: isSelected ? 2.0 : 1.0,
             ),
             child: Text(widget.title),
@@ -164,42 +164,62 @@ class DrawersWeb extends StatefulWidget {
 class _DrawersWebState extends State<DrawersWeb> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Drawer(
-      backgroundColor: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircleAvatar(
-            radius: 72.0,
-            backgroundColor: Colors.tealAccent,
-            child: CircleAvatar(
-              radius: 70.0,
-              backgroundColor: Colors.white,
-              backgroundImage: AssetImage("assets/pic.png"),
-            ),
-          ),
-          const SizedBox(height: 15.0),
-          const Text(
-            "Koustav Karmakar",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 15.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              urlLauncher("assets/instagram.svg",
-                  "https://www.instagram.com/koustav_489/profilecard/"),
-              urlLauncher(
-                "assets/facebook.svg",
-                "https://www.facebook.com/koustav.karmakar.75?mibextid=kFxxJD",
-              ),
-              urlLauncher(
-                "assets/github.svg",
-                "https://www.github.com/Koustav-KK",
-              ),
+      backgroundColor: Colors.indigo.shade500, // Allow gradient to show through
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.colorScheme.surface,
+              theme.colorScheme.primary.withOpacity(0.2),
+              theme.colorScheme.secondary.withOpacity(0.2),
+              theme.colorScheme.surface.withOpacity(0.9),
             ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 72.0,
+              backgroundColor:
+                  theme.colorScheme.primary, // Theme-consistent color
+              child: CircleAvatar(
+                radius: 70.0,
+                backgroundColor: theme.colorScheme.surface,
+                backgroundImage: const AssetImage("assets/pic.png"),
+              ),
+            ),
+            const SizedBox(height: 15.0),
+            SansBold(
+              "Koustav Karmakar",
+              30.0,
+              color: Colors.black,
+            ), // Use SansBold for consistency
+            const SizedBox(height: 15.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                urlLauncher(
+                  "assets/instagram.svg",
+                  "https://www.instagram.com/koustav_489/profilecard/",
+                ),
+                urlLauncher(
+                  "assets/facebook.svg",
+                  "https://www.facebook.com/koustav.karmakar.75?mibextid=kFxxJD",
+                ),
+                urlLauncher(
+                  "assets/github.svg",
+                  "https://www.github.com/Koustav-KK",
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -215,47 +235,111 @@ class DrawerMobile extends StatefulWidget {
 class _DrawerMobileState extends State<DrawerMobile> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Drawer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DrawerHeader(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2.0, color: Colors.black)),
-              child: Image.asset("assets/pic.png"),
-            ),
-          ),
-          TabsMobile(text: "Home", route: '/'),
-          SizedBox(height: 20.0),
-          TabsMobile(text: "Works", route: '/works'),
-          SizedBox(height: 20.0),
-          TabsMobile(text: "Blog", route: '/blog'),
-          SizedBox(height: 20.0),
-          TabsMobile(text: "About", route: '/about'),
-          SizedBox(height: 20.0),
-          TabsMobile(text: "Contact", route: '/contact'),
-          SizedBox(height: 40.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              urlLauncher(
-                "assets/instagram.svg",
-                "https://www.instagram.com/koustav_489/profilecard/",
-              ),
-              urlLauncher(
-                "assets/facebook.svg",
-                "https://www.facebook.com/koustav.karmakar.75?mibextid=kFxxJD",
-              ),
-              urlLauncher(
-                "assets/github.svg",
-                "https://www.github.com/Koustav-KK",
-              )
+      backgroundColor: Colors.indigo.shade500,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.colorScheme.surface,
+              theme.colorScheme.primary.withOpacity(0.2),
+              theme.colorScheme.secondary.withOpacity(0.2),
+              theme.colorScheme.surface.withOpacity(0.9),
             ],
-          )
-        ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DrawerHeader(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 2.0,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                child: Image.asset("assets/pic.png"),
+              ),
+            ),
+            TabsMobile(text: "Home", route: '/'),
+            const SizedBox(height: 20.0),
+            TabsMobile(text: "Works", route: '/works'),
+            const SizedBox(height: 20.0),
+            TabsMobile(text: "Blog", route: '/blog'),
+            const SizedBox(height: 20.0),
+            TabsMobile(text: "About", route: '/about'),
+            const SizedBox(height: 20.0),
+            TabsMobile(text: "Contact", route: '/contact'),
+            const SizedBox(height: 30.0),
+
+            // 🚀 Added Dark/Light toggle button below menu items
+            InkWell(
+              onTap: () {
+                themeProvider.toggleTheme();
+                Navigator.pop(context);
+              },
+              borderRadius:
+                  BorderRadius.circular(12), // optional rounded ripple
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 35.0),
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Icon(
+                        themeProvider.themeMode == ThemeMode.dark
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
+                        color: theme.colorScheme.onSecondary,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          themeProvider.themeMode == ThemeMode.dark
+                              ? 'Switch to Light Mode'
+                              : 'Switch to Dark Mode',
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                urlLauncher(
+                  "assets/instagram.svg",
+                  "https://www.instagram.com/koustav_489/profilecard/",
+                ),
+                urlLauncher(
+                  "assets/facebook.svg",
+                  "https://www.facebook.com/koustav.karmakar.75?mibextid=kFxxJD",
+                ),
+                urlLauncher(
+                  "assets/github.svg",
+                  "https://www.github.com/Koustav-KK",
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -433,9 +517,9 @@ class _AnimatedCardState extends State<AnimatedCard>
         elevation: 30.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
-          side: BorderSide(color: Colors.tealAccent),
+          side: BorderSide(color: Colors.cyan.shade700),
         ),
-        shadowColor: Colors.tealAccent,
+        shadowColor: Colors.cyan.shade700,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -553,7 +637,7 @@ class _ContactFormMobileState extends State<ContactFormMobile> {
                 borderRadius: BorderRadius.circular(10.0)),
             height: 60.0,
             minWidth: widthDevice / 2.2,
-            color: Colors.tealAccent,
+            color: Colors.tealAccent.shade700,
             child: SansBold("Submit", 20.0),
           ),
         ],
@@ -586,7 +670,11 @@ class _ContactFormWebState extends State<ContactFormWeb> {
       child: Column(
         children: [
           SizedBox(height: 30.0),
-          SansBold("Contact Me", 40.0),
+          SansBold(
+            "Contact Me",
+            40.0,
+            color: Colors.blue,
+          ),
           SizedBox(
             height: 20.0,
           ),
@@ -673,7 +761,7 @@ class _ContactFormWebState extends State<ContactFormWeb> {
                 borderRadius: BorderRadius.circular(10.0)),
             height: 60.0,
             minWidth: 200.0,
-            color: Colors.tealAccent,
+            color: Colors.tealAccent.shade700,
             child: SansBold("Submit", 20.0),
           )
         ],
@@ -708,7 +796,8 @@ class AddDataFirestore {
 Future<void> DialogError(BuildContext context, String title) async {
   showDialog(
     context: context,
-    builder: (BuildContext context) => AlertDialog(
+    barrierDismissible: false, // prevent tapping outside to dismiss manually
+    builder: (BuildContext dialogContext) => AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -716,10 +805,10 @@ Future<void> DialogError(BuildContext context, String title) async {
     ),
   );
 
-  // Automatically dismiss the dialog after 2 seconds
+// Use the correct context for popping:
   await Future.delayed(const Duration(seconds: 1));
-  if (Navigator.of(context).canPop()) {
-    Navigator.of(context).pop();
+  if (Navigator.of(context, rootNavigator: true).canPop()) {
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }
 

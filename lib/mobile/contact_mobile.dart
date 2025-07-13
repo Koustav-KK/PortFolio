@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:logger/logger.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../components.dart';
 
@@ -14,33 +10,69 @@ class ContactMobile extends StatefulWidget {
 }
 
 class _ContactMobileState extends State<ContactMobile> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: Colors.white,
-        endDrawer: DrawerMobile(),
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxisScrolled) {
-            return <Widget>[
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
+      endDrawer: DrawerMobile(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.colorScheme.surface,
+              theme.colorScheme.primary.withOpacity(0.2),
+              theme.colorScheme.secondary.withOpacity(0.2),
+              theme.colorScheme.surface.withOpacity(0.9),
+            ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+            transform: GradientRotation(
+              _scrollController.hasClients
+                  ? _scrollController.offset * 0.0005
+                  : 0,
+            ),
+          ),
+        ),
+        child: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
               SliverAppBar(
-                expandedHeight: 500.0,
-                backgroundColor: Colors.white,
-                iconTheme: IconThemeData(size: 35.0, color: Colors.black),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Image.asset(
-                    "assets/contact_image.jpg",
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.high,
-                  ),
+                backgroundColor: Colors.transparent,
+                iconTheme: IconThemeData(
+                  size: 28.0,
+                  color: theme.colorScheme.onSurface,
                 ),
-              )
+                floating: true, // hides on scroll down, shows on scroll up
+                snap: true, // not pinned so it can hide on scroll down
+                elevation: 0,
+              ),
             ];
           },
-          body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
-            child: ContactFormMobile(),
+          body: Center(
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 20.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: ContactFormMobile(),
+              ),
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

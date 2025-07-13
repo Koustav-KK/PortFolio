@@ -3,14 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Blog extends StatefulWidget {
-  const Blog({super.key});
+class BlogMobile extends StatefulWidget {
+  const BlogMobile({super.key});
 
   @override
-  State<Blog> createState() => _BlogState();
+  State<BlogMobile> createState() => _BlogMobileState();
 }
 
-class _BlogState extends State<Blog> with SingleTickerProviderStateMixin {
+class _BlogMobileState extends State<BlogMobile>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   final ScrollController _scrollController = ScrollController();
@@ -34,9 +35,7 @@ class _BlogState extends State<Blog> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool isWeb = MediaQuery.of(context).size.width > 800;
     final theme = Theme.of(context);
-
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: Colors.transparent,
@@ -63,43 +62,59 @@ class _BlogState extends State<Blog> with SingleTickerProviderStateMixin {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                backgroundColor: Colors.transparent, // Match other widgets
+                expandedHeight: 400.0,
+                backgroundColor: theme.colorScheme.surface,
                 iconTheme: IconThemeData(
                   size: 35.0,
                   color: theme.colorScheme.onSurface,
                 ),
                 flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: isWeb ? false : true,
-                  title: Container(
+                  background: Container(
                     decoration: BoxDecoration(
-                      color:
-                          theme.colorScheme.primary, // Theme-consistent color
-                      borderRadius: BorderRadius.circular(3.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.primary.withOpacity(0.3),
-                          blurRadius: 6,
-                          offset: const Offset(0, 3),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          theme.colorScheme.primary.withOpacity(0.5),
+                          theme.colorScheme.secondary.withOpacity(0.5),
+                        ],
+                        stops: const [0.0, 1.0],
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Text(
+                            "Welcome To My Blog",
+                            style: GoogleFonts.getFont(
+                              'Poppins',
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Text(
+                            "Exploring My Thoughts",
+                            style: GoogleFonts.getFont(
+                              'Poppins',
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w400,
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: isWeb ? 7.0 : 4.0),
-                    child: AbelCustom(
-                      text: "Welcome To My Blog",
-                      size: isWeb ? 30.0 : 24.0,
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  background: Image.asset(
-                    "assets/blog.JPG",
-                    filterQuality: FilterQuality.high,
-                    fit: BoxFit.cover,
                   ),
                 ),
-                expandedHeight: isWeb ? 500.0 : 400.0,
-                pinned: true,
+                pinned: false,
                 floating: true,
               ),
             ];
@@ -110,6 +125,7 @@ class _BlogState extends State<Blog> with SingleTickerProviderStateMixin {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 50),
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot documentSnapshot =
@@ -119,7 +135,7 @@ class _BlogState extends State<Blog> with SingleTickerProviderStateMixin {
                       child: BlogPost(
                         title: documentSnapshot['title'],
                         bodyText: documentSnapshot['body'],
-                        isWeb: isWeb,
+                        isWeb: false,
                       ),
                     );
                   },
@@ -193,10 +209,14 @@ class _BlogPostState extends State<BlogPost> {
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(3.0),
                     ),
-                    child: AbelCustom(
-                      text: widget.title ?? 'Untitled',
-                      size: 25.0,
-                      color: theme.colorScheme.onPrimary,
+                    child: Text(
+                      widget.title ?? 'Untitled',
+                      style: GoogleFonts.getFont(
+                        'Poppins',
+                        fontSize: 25.0,
+                        color: theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
