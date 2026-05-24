@@ -654,101 +654,126 @@ class ContactFormWeb extends StatefulWidget {
 }
 
 class _ContactFormWebState extends State<ContactFormWeb> {
-  //var logger = Logger();
-  //final TextEditingController _firstNameController = TextEditingController();
-  //final TextEditingController _lastNameController = TextEditingController();
-  //final TextEditingController _emailController = TextEditingController();
-  //final TextEditingController _phoneController = TextEditingController();
-  //final TextEditingController _messageController = TextEditingController();
-  //final formKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    var widthDevice = MediaQuery.of(context).size.width;
     return Form(
       key: formKey,
       child: Column(
         children: [
-          SizedBox(height: 30.0),
+          const SizedBox(height: 30.0),
           SansBold(
             "Contact Me",
             40.0,
             color: Colors.blue,
           ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(children: [
-                textForm(
-                  text: "First Name",
-                  Containerwidth: 350.0,
-                  hintText: "Please Enter First Name",
-                  controller: _firstNameController,
-                  validator: (text) {
-                    if (text.isEmpty) {
-                      return "Please Enter your First Name";
-                    }
-                  },
-                ),
-                SizedBox(height: 15.0),
-                textForm(
-                  text: "Email",
-                  Containerwidth: 350.0,
-                  hintText: "Please Enter Email",
-                  controller: _emailController,
-                  validator: (text) {
-                    if (text.isEmpty) {
-                      return "Please Enter your Email";
-                    }
-                  },
-                ),
-              ]),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          const SizedBox(height: 20.0),
+
+          // ✅ Use LayoutBuilder to get actual available width
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final fieldWidth = (constraints.maxWidth - 20) / 2; // 20 = gap between columns
+
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textForm(
-                    text: "Last Name",
-                    Containerwidth: 350.0,
-                    hintText: "Please Enter Last Name",
-                    controller: _lastNameController,
+                  // ✅ Left column — Expanded, no fixed width
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        textForm(
+                          text: "First Name",
+                          Containerwidth: fieldWidth, // ✅ dynamic
+                          hintText: "Please Enter First Name",
+                          controller: _firstNameController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return "Please Enter your First Name";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15.0),
+                        textForm(
+                          text: "Email",
+                          Containerwidth: fieldWidth, // ✅ dynamic
+                          hintText: "Please Enter Email",
+                          controller: _emailController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return "Please Enter your Email";
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 15.0),
-                  textForm(
-                      text: "Phone Number",
-                      Containerwidth: 350.0,
-                      hintText: "Please Enter Phone Number",
-                      controller: _phoneController),
+
+                  const SizedBox(width: 20.0), // gap between columns
+
+                  // ✅ Right column — Expanded, no fixed width
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        textForm(
+                          text: "Last Name",
+                          Containerwidth: fieldWidth, // ✅ dynamic
+                          hintText: "Please Enter Last Name",
+                          controller: _lastNameController,
+                        ),
+                        const SizedBox(height: 15.0),
+                        textForm(
+                          text: "Phone Number",
+                          Containerwidth: fieldWidth, // ✅ dynamic
+                          hintText: "Please Enter Phone Number",
+                          controller: _phoneController,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              )
-            ],
+              );
+            },
           ),
-          SizedBox(height: 20.0),
-          textForm(
-              text: "Message",
-              Containerwidth: widthDevice / 1.5,
-              hintText: "Enter Your Message",
-              maxLine: 10,
-              controller: _messageController,
-              validator: (text) {
-                if (text.isEmpty) {
-                  return "Please Enter your Message";
-                }
-              }),
-          SizedBox(height: 20.0),
+
+          const SizedBox(height: 20.0),
+
+          // ✅ Message field also uses LayoutBuilder for dynamic width
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return textForm(
+                text: "Message",
+                Containerwidth: constraints.maxWidth, // ✅ full available width
+                hintText: "Enter Your Message",
+                maxLine: 10,
+                controller: _messageController,
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return "Please Enter your Message";
+                  }
+                  return null;
+                },
+              );
+            },
+          ),
+
+          const SizedBox(height: 20.0),
           MaterialButton(
             onPressed: () async {
               logger.d(_firstNameController.text);
-              final addData = new AddDataFirestore();
+              final addData = AddDataFirestore();
               if (formKey.currentState!.validate()) {
                 if (await addData.addResponse(
-                    _firstNameController.text,
-                    _lastNameController.text,
-                    _emailController.text,
-                    _phoneController.text,
-                    _messageController.text)) {
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _emailController.text,
+                  _phoneController.text,
+                  _messageController.text,
+                )) {
                   formKey.currentState!.reset();
                   DialogError(context, "Message Sent Successfully");
                 } else {
@@ -758,18 +783,18 @@ class _ContactFormWebState extends State<ContactFormWeb> {
             },
             elevation: 20.0,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             height: 60.0,
             minWidth: 200.0,
             color: Colors.tealAccent.shade700,
             child: SansBold("Submit", 20.0),
-          )
+          ),
         ],
       ),
     );
   }
 }
-
 class AddDataFirestore {
   CollectionReference response =
       FirebaseFirestore.instance.collection('messages');

@@ -13,6 +13,14 @@ class _ContactMobileState extends State<ContactMobile> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {}); // triggers gradient rebuild on scroll
+    });
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
@@ -21,6 +29,8 @@ class _ContactMobileState extends State<ContactMobile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final topPadding =
+        MediaQuery.of(context).padding.top + kToolbarHeight + 25.0;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -45,32 +55,39 @@ class _ContactMobileState extends State<ContactMobile> {
             ),
           ),
         ),
-        child: NestedScrollView(
+        child: CustomScrollView(
           controller: _scrollController,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                backgroundColor: Colors.transparent,
-                iconTheme: IconThemeData(
-                  size: 28.0,
-                  color: theme.colorScheme.onSurface,
-                ),
-                floating: true, // hides on scroll down, shows on scroll up
-                snap: true, // not pinned so it can hide on scroll down
-                elevation: 0,
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              iconTheme: IconThemeData(
+                size: 28.0,
+                color: theme.colorScheme.onSurface,
               ),
-            ];
-          },
-          body: Center(
-            child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 20.0),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: ContactFormMobile(),
+              floating: true,
+              snap: true,
+              elevation: 0,
+            ),
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 25.0,
+                    bottom: 25.0,
+                    left: 20.0,
+                    right: 20.0,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 280,
+                      maxWidth: 600,
+                    ),
+                    child: ContactFormMobile(),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
